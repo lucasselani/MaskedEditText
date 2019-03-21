@@ -12,7 +12,7 @@ Use this masked edit text (which is a AppCompatEditText) to masks your texts lik
 The lib is written in Kotlin and the component comes with a companion object with 2 masks to use, but you can create your own.
 There's a limitation though, the text must you want to mask must be filled from left to right (e.g.: cellphone number, date, etc),  it won't work if the text is filled from right to left (e.g.: money).
 
-#### How to use
+### How to use
 
 The use is very simple, you need to pass to the lib a list of the masks you want to apply, so the MaskedEditText can change from one mask to another when the texts increases.
 ````Kotlin
