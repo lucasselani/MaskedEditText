@@ -33,13 +33,13 @@ edittext.setOnTextChangedCallback { /* Do something */ }
 ````
 
 ### How to implement 
-On your app's gradle file, you should import the jitpack.io and this repo's url:
+On your app's gradle file, you should import the jitpack.io and this repo's url (you should override the word tag on the dependencies for the one you want, e.g.: 1.1, master-SNAPSHOT, etc. You can found more about it by clicking on the jitpack's icon):
 ````Gradle
    repositories {
         jcenter()
         maven { url "https://jitpack.io" }
    }
    dependencies {
-         implementation 'com.github.lucasselani:MaskedEditText:1.0'
+         implementation 'com.github.lucasselani:MaskedEditText:Tag'
    }
 ````
