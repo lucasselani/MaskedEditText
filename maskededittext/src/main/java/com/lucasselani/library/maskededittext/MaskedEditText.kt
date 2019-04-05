@@ -36,21 +36,19 @@ class MaskedEditText : AppCompatEditText {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun afterTextChanged(editable: Editable?) {}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                onTextChanged(p0.toString(), p3)
+                if(masks.isNotEmpty()) onTextChanged(p0.toString())
             }
         })
     }
 
-    private fun onTextChanged(text: String, after: Int) {
-        if (masks.isEmpty()) return
-        if (after == 0) updating = true
+    private fun onTextChanged(text: String) {
         if (updating) {
             updating = false
             return
         }
 
         updating = true
-        val maskedText = mask(text)
+        val maskedText = if(text.isEmpty()) "" else mask(text)
         this.setText(maskedText)
         this.setSelection(maskedText.length)
         this.callback?.invoke()
