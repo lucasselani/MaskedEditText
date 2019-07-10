@@ -12,7 +12,10 @@ class MaskedEditText : AppCompatEditText {
         @JvmStatic
         val documentMasks: List<String> = listOf("###.###.###-##", "##.###.###/####-##")
         @JvmStatic
-        val phoneMasks: List<String> = listOf("(##)####-####", "(##)#####-####")
+        val phoneMasks: List<String> = listOf("(##) ####-####", "(##) #####-####")
+        @JvmStatic
+        val bankSlipMask = listOf("#####.#####*#####.#####*#####.##### #*##############",
+            "###########-#*###########-#*###########-#*###########-#")
     }
 
     private var masks: List<String> = emptyList()
@@ -62,7 +65,9 @@ class MaskedEditText : AppCompatEditText {
         unmasked.forEach {
             chosenMask = chosenMask!!.replaceFirst('#', it)
         }
-        return chosenMask!!.dropLastWhile { it != unmasked.last() }
+        chosenMask = chosenMask!!.dropLastWhile { it != unmasked.last() }
+        return if(chosenMask!!.contains('*')) chosenMask!!.replaceEvery("\n", '*')
+        else chosenMask!!
     }
 
     private fun unmask(s: String): String = s.replace("[^A-Za-z0-9]*".toRegex(), "")
@@ -78,4 +83,12 @@ class MaskedEditText : AppCompatEditText {
     fun setOnTextChangedCallback(callback: (() -> Unit)?) {
         this.callback = callback
     }
+}
+
+fun String.replaceEvery(substitute: String, placeholder: Char): String {
+    var temp = ""
+    this.forEach {
+        temp += if(it == placeholder) substitute else it
+    }
+    return temp
 }

@@ -21,6 +21,24 @@ val list = listOf("###.###.###-##", "##.###.###/####-##")
 edittext.setMasks(list)
 ````
 
+If you want a line break in your mask, you can use the * character to insert it in your masked text:
+````Kotlin
+val bankSlip = listOf("#####.#####*#####.#####*#####.##### #*##############", "###########-#*###########-#*###########-#*###########-#")
+result { 
+  23791.11103
+  60000.000103
+  0100.222206 1
+  486220000000000
+
+  or
+
+  83620000001-3
+  38350138000-0
+  18168932011-5
+  08081757497-5
+}
+````
+
 You can retrieve the data by accessing 2 variables:
 ````Kotlin
 edittext.masked //Will retrieve the text with the applied mask

@@ -15,7 +15,8 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="40dp"
-            android:inputType="number"/>
+            android:inputType="number"
+            android:hint="Phone"/>
 
     <com.lucasselani.library.maskededittext.MaskedEditText
             android:id="@+id/document"
@@ -24,6 +25,19 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/phone"
             android:layout_marginTop="40dp"
-            android:inputType="number"/>
+            android:inputType="number"
+            android:hint="Document"/>
+
+    <com.lucasselani.library.maskededittext.MaskedEditText
+            android:id="@+id/bankSlip"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/document"
+            android:layout_marginTop="40dp"
+            android:digits="0123456789"
+            android:inputType="number"
+            android:lines="4"
+            android:hint="Bank Slip"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

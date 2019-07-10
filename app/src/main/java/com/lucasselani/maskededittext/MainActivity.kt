@@ -20,6 +20,9 @@ class MainActivity : AppCompatActivity() {
 
         document.setMasks(MaskedEditText.documentMasks)
         document.setOnTextChangedCallback { logVerbose("Document", document) }
+
+        bankSlip.setMasks(MaskedEditText.bankSlipMask)
+        bankSlip.setOnTextChangedCallback { logVerbose("BankSlip", bankSlip) }
     }
 
     private fun logVerbose(tag: String, editText: MaskedEditText) {
