@@ -39,6 +39,13 @@ result {
 }
 ````
 
+You can create a preseted mask with a starting number, in that way, this mask will always be chosen if your first char in your text matches that first char in the mask's text:
+````Kotlin
+val masks = listOf("8####.######.######", "1##.##.#####.##", "################")
+  If the text starts with 8 -> choose first
+  If the text starts with 1 -> choose second
+  else choose the last
+````
 You can retrieve the data by accessing 2 variables:
 ````Kotlin
 edittext.masked //Will retrieve the text with the applied mask

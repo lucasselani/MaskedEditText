@@ -15,7 +15,7 @@ class MaskedEditText : AppCompatEditText {
         val phoneMasks: List<String> = listOf("(##) ####-####", "(##) #####-####")
         @JvmStatic
         val bankSlipMask = listOf("#####.#####*#####.#####*#####.##### #*##############",
-            "###########-#*###########-#*###########-#*###########-#")
+            "8##########-#*###########-#*###########-#*###########-#")
     }
 
     private var masks: List<String> = emptyList()
@@ -62,19 +62,33 @@ class MaskedEditText : AppCompatEditText {
         var chosenMask: String? = currentMask(unmasked)
         if (chosenMask.isNullOrEmpty()) return text.dropLast(1)
 
-        unmasked.forEach {
-            chosenMask = chosenMask!!.replaceFirst('#', it)
-        }
-        chosenMask = chosenMask!!.dropLastWhile { it != unmasked.last() }
-        return if(chosenMask!!.contains('*')) chosenMask!!.replaceEvery("\n", '*')
-        else chosenMask!!
+        chosenMask = replaceMask(unmasked, chosenMask)
+        chosenMask = chosenMask.dropLastWhile { it != unmasked.last() }
+        return if(chosenMask.contains('*')) chosenMask.replaceEvery("\n", '*')
+        else chosenMask
     }
 
-    private fun unmask(s: String): String = s.replace("[^A-Za-z0-9]*".toRegex(), "")
+    private fun replaceMask(str: String, mask: String) : String {
+        var tempMask = mask
+        var isFirst = true
+        str.forEach {
+            tempMask = if(isFirst && tempMask.first().toString().matches("\\d+".toRegex())) {
+                tempMask.replaceFirst(tempMask.first(), it)
+            } else tempMask.replaceFirst('#', it)
+            isFirst = false
+        }
+        return tempMask
+    }
+
+    private fun unmask(str: String): String = str.replace("[^A-Za-z0-9]*".toRegex(), "")
 
     private fun maskLength(mask: String): Int = mask.replace("[^#]*".toRegex(), "").length
 
-    private fun currentMask(str: String): String? = masks.find { str.length <= maskLength(it) }
+    private fun hasLength(str: String, mask: String, bias: Int = 0) = str.length <= maskLength(mask) + bias
+
+    private fun currentMask(str: String): String? =
+        masks.find { str.matchMask(it) && hasLength(str, it, 1) } ?:
+        masks.find { hasLength(str, it) && it.firstIsNotNumber() }
 
     fun setMasks(masks: List<String>) {
         this.masks = masks.sortedWith(compareBy { it.length })
@@ -91,4 +105,12 @@ fun String.replaceEvery(substitute: String, placeholder: Char): String {
         temp += if(it == placeholder) substitute else it
     }
     return temp
+}
+
+fun String.matchMask(mask: String): Boolean {
+    return this.first() == mask.first()
+}
+
+fun String.firstIsNotNumber(): Boolean {
+    return this.first().toString().matches("[^0-9]".toRegex())
 }
