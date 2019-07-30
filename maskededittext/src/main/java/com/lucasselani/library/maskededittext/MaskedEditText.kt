@@ -18,9 +18,26 @@ class MaskedEditText : AppCompatEditText {
             "8##########-#*###########-#*###########-#*###########-#")
     }
 
+    private fun String.replaceEvery(substitute: String, placeholder: Char): String {
+        var temp = ""
+        this.forEach {
+            temp += if(it == placeholder) substitute else it
+        }
+        return temp
+    }
+
+    private fun String.matchMask(mask: String): Boolean {
+        return this.first() == mask.first()
+    }
+
+    private fun String.firstIsNotNumber(): Boolean {
+        return this.first().toString().matches("[^0-9]".toRegex())
+    }
+
     private var masks: List<String> = emptyList()
     private var updating = false
     private var callback: (() -> Unit)? = null
+    private var rules: ((String) -> Boolean)? = null
 
     val masked: String
         get() = this.text.toString()
@@ -59,8 +76,10 @@ class MaskedEditText : AppCompatEditText {
 
     private fun mask(text: String): String {
         val unmasked = unmask(text)
+        if(unmasked.isEmpty()) return ""
+
         var chosenMask: String? = currentMask(unmasked)
-        if (chosenMask.isNullOrEmpty()) return text.dropLast(1)
+        if (chosenMask.isNullOrEmpty() || this.rules?.invoke(unmasked) == false) return text.dropLast(1)
 
         chosenMask = replaceMask(unmasked, chosenMask)
         chosenMask = chosenMask.dropLastWhile { it != unmasked.last() }
@@ -97,20 +116,8 @@ class MaskedEditText : AppCompatEditText {
     fun setOnTextChangedCallback(callback: (() -> Unit)?) {
         this.callback = callback
     }
-}
 
-fun String.replaceEvery(substitute: String, placeholder: Char): String {
-    var temp = ""
-    this.forEach {
-        temp += if(it == placeholder) substitute else it
+    fun setRules(rules: ((String) -> Boolean)?) {
+        this.rules = rules
     }
-    return temp
-}
-
-fun String.matchMask(mask: String): Boolean {
-    return this.first() == mask.first()
-}
-
-fun String.firstIsNotNumber(): Boolean {
-    return this.first().toString().matches("[^0-9]".toRegex())
 }

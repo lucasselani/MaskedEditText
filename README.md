@@ -46,11 +46,19 @@ val masks = listOf("8####.######.######", "1##.##.#####.##", "################")
   If the text starts with 1 -> choose second
   else choose the last
 ````
+
 You can retrieve the data by accessing 2 variables:
 ````Kotlin
 edittext.masked //Will retrieve the text with the applied mask
 edittext.raw // Will retrieve the text without any mask
 ````
+
+You can set a lambda to apply rules to your mask. The lambda is a function that receives a String parameter and returns a Boolean response. If the response is true, the mask is allowed to continue, if it's false the value won't appear in the edit text.
+````Kotlin
+edittext.setRules { rules(edittext.raw) }
+private fun rules(value: String) = value.first() == '9'
+````
+In the example above, the user can only start typing with the number 9, anything different than 9 won't appear in the edit text.
 
 Also it's possible to set a callback to notify you when the text has changed, so you can have more control:
 ````Kotlin

@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity() {
     private fun setEditText() {
         phone.setMasks(MaskedEditText.phoneMasks)
         phone.setOnTextChangedCallback { logVerbose("Phone", phone) }
+        phone.setRules { PhoneValidator.validate(phone.raw)  }
 
         document.setMasks(MaskedEditText.documentMasks)
         document.setOnTextChangedCallback { logVerbose("Document", document) }
